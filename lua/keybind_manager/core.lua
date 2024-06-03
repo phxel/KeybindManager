@@ -1,5 +1,3 @@
--- keybind_manager/core.lua
-
 KeybindManager = KeybindManager or {}
 KeybindManager.Keybinds = KeybindManager.Keybinds or {}
 KeybindManager.KeyStates = KeybindManager.KeyStates or {}
