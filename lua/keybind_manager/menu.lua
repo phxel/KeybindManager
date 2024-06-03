@@ -7,7 +7,6 @@ function KeybindManager:OpenMenu()
         return
     end
 
-    -- Utility function to create a label
     local function createLabel(parent, text)
         local label = vgui.Create("DLabel", parent)
         label:SetText(text)
@@ -18,7 +17,6 @@ function KeybindManager:OpenMenu()
         return label
     end
 
-    -- Main Frame
     local menu = vgui.Create("DFrame")
     menu:SetTitle("Keybind Manager")
     menu:SetSize(600, 500)
@@ -30,7 +28,6 @@ function KeybindManager:OpenMenu()
         draw.RoundedBox(0, 0, 0, w, h, Color(50, 50, 50, 230))
     end
 
-    -- Profile Management
     local profilePanel = vgui.Create("DPanel", menu)
     profilePanel:Dock(TOP)
     profilePanel:SetTall(50)
@@ -49,10 +46,14 @@ function KeybindManager:OpenMenu()
 
     local function populateKeybindList()
         keybindList:Clear()
-        for name, bind in pairs(KeybindManager.Keybinds) do
+        for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile]) do
             keybindList:AddLine(name)
         end
     end
+
+    hook.Add("KeybindManagerProfileChanged", "ReloadKeybindList", function()
+        populateKeybindList()
+    end)
 
     profileComboBox.OnSelect = function(panel, index, value)
         KeybindManager:LoadProfile(value)
@@ -64,20 +65,15 @@ function KeybindManager:OpenMenu()
     newProfileButton:Dock(RIGHT)
     newProfileButton:SetWide(100)
     newProfileButton.DoClick = function()
-        Derma_StringRequest(
-            "New Profile",
-            "Enter profile name:",
-            "",
-            function(text)
-                if text and text ~= "" then
-                    KeybindManager:SaveProfile(text)
-                    profileComboBox:AddChoice(text)
-                    profileComboBox:SetValue(text)
-                    KeybindManager:LoadProfile(text)
-                    populateKeybindList()
-                end
+        Derma_StringRequest("New Profile", "Enter profile name:", "", function(text)
+            if text and text ~= "" then
+                KeybindManager:SaveProfile(text)
+                profileComboBox:AddChoice(text)
+                profileComboBox:SetValue(text)
+                KeybindManager:LoadProfile(text)
+                populateKeybindList()
             end
-        )
+        end)
     end
 
     local deleteProfileButton = vgui.Create("DButton", profilePanel)
@@ -93,23 +89,19 @@ function KeybindManager:OpenMenu()
                 KeybindManager.Keybinds = KeybindManager.Profiles["default"] or {}
             end
             KeybindManager:SaveKeybinds()
-    
-            -- Clear the existing choices in the profileComboBox
+
             profileComboBox:Clear()
-    
-            -- Re-add the updated list of profiles to the profileComboBox
+
             for profileName, _ in pairs(KeybindManager.Profiles) do
                 profileComboBox:AddChoice(profileName)
             end
-    
-            -- Set the selected profile to the current profile
+
             profileComboBox:SetValue(KeybindManager.CurrentProfile)
-    
+
             populateKeybindList()
         end
     end
-    
-    -- Right Panel (Keybind List)
+
     local rightPanel = vgui.Create("DPanel", menu)
     rightPanel:Dock(RIGHT)
     rightPanel:SetWide(250)
@@ -119,7 +111,6 @@ function KeybindManager:OpenMenu()
         draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60, 230))
     end
 
-    -- Left Panel (Keybind Details)
     local leftPanel = vgui.Create("DPanel", menu)
     leftPanel:Dock(FILL)
     leftPanel:DockMargin(5, 5, 5, 5)
@@ -128,7 +119,6 @@ function KeybindManager:OpenMenu()
         draw.RoundedBox(0, 0, 0, w, h, Color(70, 70, 70, 230))
     end
 
-    -- Keybind List
     keybindList = vgui.Create("DListView", rightPanel)
     keybindList:Dock(FILL)
     keybindList:AddColumn("Keybind")
@@ -136,10 +126,8 @@ function KeybindManager:OpenMenu()
     keybindList:SetHeaderHeight(30)
     keybindList:SetDataHeight(25)
 
-    -- Call the population function after the list has been created
     populateKeybindList()
 
-    -- Keybind Detail Controls
     createLabel(leftPanel, "Keybind Name:")
     local nameEntry = vgui.Create("DTextEntry", leftPanel)
     nameEntry:Dock(TOP)
@@ -167,7 +155,6 @@ function KeybindManager:OpenMenu()
     isDefaultActionCheckbox:SetTextColor(Color(255, 255, 255))
     isDefaultActionCheckbox:DockMargin(0, 0, 0, 10)
 
-    -- Action Buttons
     local addButton = vgui.Create("DButton", leftPanel)
     addButton:SetText("Add/Update Keybind")
     addButton:Dock(TOP)
@@ -193,11 +180,16 @@ function KeybindManager:OpenMenu()
         local selectedLine = keybindList:GetSelectedLine()
         if selectedLine then
             local name = keybindList:GetLine(selectedLine):GetValue(1)
-            local bind = KeybindManager.Keybinds[name]
+            local bind = KeybindManager.Profiles[KeybindManager.CurrentProfile][name]
             if bind then
                 local defaultBind = input.LookupBinding(bind.command) or ""
-                KeybindManager.Keybinds[name] = nil
+                KeybindManager.Profiles[KeybindManager.CurrentProfile][name] = nil
                 KeybindManager:SaveKeybinds()
+
+                if bind.isDefaultAction then
+                    RunConsoleCommand("bind", defaultBind, bind.command)
+                end
+
                 populateKeybindList()
             end
         end
@@ -205,7 +197,7 @@ function KeybindManager:OpenMenu()
 
     keybindList.OnRowSelected = function(_, _, line)
         local name = line:GetValue(1)
-        local bind = KeybindManager.Keybinds[name]
+        local bind = KeybindManager.Profiles[KeybindManager.CurrentProfile][name]
         if bind then
             nameEntry:SetValue(name)
             descriptionEntry:SetValue(bind.description)

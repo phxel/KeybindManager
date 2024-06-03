@@ -1,14 +1,11 @@
 if SERVER then
     include("keybind_manager/core.lua")
 else
-    KeybindManager = KeybindManager or {} -- initialize table 
-
+    KeybindManager = KeybindManager or {}
     include("keybind_manager/core.lua")
     include("keybind_manager/menu.lua")
-
-    KeybindManager:LoadKeybinds() -- load existing keybinds if present in json
-
+    KeybindManager:LoadKeybinds()
     concommand.Add("open_keybind_manager", function()
-        KeybindManager:OpenMenu() -- call function if command is entered in console
+        KeybindManager:OpenMenu()
     end)
 end
