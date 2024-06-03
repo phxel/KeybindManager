@@ -88,12 +88,27 @@ function KeybindManager:OpenMenu()
         local selectedProfile = profileComboBox:GetValue()
         if selectedProfile and selectedProfile ~= "" then
             KeybindManager.Profiles[selectedProfile] = nil
-            profileComboBox:RemoveChoice(selectedProfile)
-            KeybindManager:LoadProfile("default")
+            if selectedProfile == KeybindManager.CurrentProfile then
+                KeybindManager.CurrentProfile = "default"
+                KeybindManager.Keybinds = KeybindManager.Profiles["default"] or {}
+            end
+            KeybindManager:SaveKeybinds()
+    
+            -- Clear the existing choices in the profileComboBox
+            profileComboBox:Clear()
+    
+            -- Re-add the updated list of profiles to the profileComboBox
+            for profileName, _ in pairs(KeybindManager.Profiles) do
+                profileComboBox:AddChoice(profileName)
+            end
+    
+            -- Set the selected profile to the current profile
+            profileComboBox:SetValue(KeybindManager.CurrentProfile)
+    
             populateKeybindList()
         end
     end
-
+    
     -- Right Panel (Keybind List)
     local rightPanel = vgui.Create("DPanel", menu)
     rightPanel:Dock(RIGHT)
