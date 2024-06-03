@@ -1,49 +1,56 @@
-## Keybind Manager
+# Keybind Manager
 
-A Garry's Mod addon for managing custom keybinds.
+Keybind Manager is a Garry's Mod addon that provides a convenient way to manage and customize keybinds. It allows players to create, edit, and delete keybinds, as well as organize them into different profiles.
 
-**Description**
+## Features
 
-This addon provides a user-friendly interface for creating and managing custom keybinds in Garry's Mod.  
+- Create and manage multiple keybind profiles
+- Bind keys to execute console commands or default actions
+- Intuitive and user-friendly menu interface
+- Customizable keybind names, descriptions, and commands
+- Ability to save and load keybind profiles
+- Support for default keybinds and custom keybinds
+- Integration with the spawnmenu for quick access
 
-**Features**
+## Installation
 
-* Create and manage profiles for different keybind sets.
-* Define custom keybinds with names, descriptions, and console commands.
-* Set a keybind as a default action, automatically unbinding the original key.
-* Easily add, update, and delete keybinds.
-* Save and load keybind profiles.
+1. Download the latest version of Keybind Manager from this GitHub repository by either cloning or downloading the repo via zip.
+2. Extract the downloaded files and place the `keybindmanager` folder into your Garry's Mod addons directory (`garrysmod/addons/`).
+3. Restart your Garry's Mod to load the addon.
 
-**Installation**
+## Usage
 
-1. Download the Keybind Manager addon file.
-2. Place the addon file in your Garry's Mod addons folder (usually located at `garrysmod/addons`).
-3. Restart Garry's Mod.
+1. Launch Garry's Mod and join a server or start a new game.
+2. Open the Keybind Manager menu using one of the following methods:
+   - Open the console and type in `open_keybind_manager`
+   - Access the Keybind Manager through the spawnmenu under "Utilities" > "Keybind Manager".
+3. Create a new profile or select an existing profile from the dropdown menu.
+4. Add, edit, or delete keybinds using the provided options in the menu.
+5. Customize the keybind name, description, command, and key for each keybind.
+6. Save your changes and close the menu.
+7. The keybinds will now be active and can be used in-game.
 
-**Usage**
+## Configuration
 
-* Open the Keybind Manager menu by running the console command `open_keybind_manager`.
+Keybind Manager does not require any additional configuration. However, you can customize the addon by modifying the following files:
 
-**Creating a Keybind**
+- `lua/keybind_manager/core.lua`: Contains the core functionality of the addon, including keybind registration, saving, and loading.
+- `lua/keybind_manager/menu.lua`: Defines the user interface and menu functionality for managing keybinds.
+- `lua/keybind_manager/spawnmenu.lua`: Integrates the Keybind Manager with the spawnmenu for easy access.
 
-1. In the Keybind Manager menu, select the desired profile from the dropdown menu.
-2. Enter a name for the keybind in the "Keybind Name" field.
-3. Enter a description for the keybind in the "Description" field. 
-4. Enter the console command you want to trigger with the keybind in the "Console Command" field.
-5. Select the desired key from the "Key" dropdown menu.
-6. Optionally, check the "Is Default Action" checkbox if you want the keybind to automatically unbind the original key assignment for the console command.
-7. Click the "Add/Update Keybind" button to save the keybind.
+## File Structure
 
-**Deleting a Keybind**
+Keybind Manager consists of the following files:
 
-1. In the Keybind Manager menu, select the keybind you want to delete from the list.
-2. Click the "Delete Keybind" button.
+- `lua/autorun/keybind_manager.lua`: The main entry point of the addon, responsible for including the necessary files on both the server and client.
+- `lua/keybind_manager/core.lua`: Contains the core functionality of the addon, including keybind registration, saving, and loading.
+- `lua/keybind_manager/menu.lua`: Defines the user interface and menu functionality for managing keybinds.
+- `lua/keybind_manager/spawnmenu.lua`: Integrates the Keybind Manager with the spawnmenu for easy access.
 
-**Saving and Loading Keybind Profiles**
+## Contributing
 
-* The Keybind Manager automatically saves the active profile when you make changes.
-* You can switch between profiles using the dropdown menu in the Keybind Manager menu.
+Contributions to Keybind Manager are welcome! If you encounter any issues, have suggestions for improvements, or would like to contribute new features, please feel free to submit a pull request.
 
-**License**
+## License
 
-This addon is licensed under the GNU General Public License v3.0 (GPLv3). You can find a copy of the license [here](https://www.gnu.org/licenses/gpl-3.0.en.html).
+This addon is released under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html). Please review the license terms before using or distributing the addon.
