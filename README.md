@@ -11,6 +11,7 @@ Keybind Manager is a Garry's Mod addon that provides a convenient way to manage 
 - Ability to save and load keybind profiles
 - Support for default keybinds and custom keybinds
 - Integration with the spawnmenu for quick access
+- Profiles are stored as .json files in garrysmod/data/keybindmanager
 
 ## Installation
 
