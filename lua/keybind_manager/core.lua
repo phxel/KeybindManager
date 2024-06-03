@@ -1,6 +1,8 @@
 KeybindManager = KeybindManager or {}
 KeybindManager.Keybinds = KeybindManager.Keybinds or {}
 KeybindManager.KeyStates = KeybindManager.KeyStates or {}
+KeybindManager.Profiles = KeybindManager.Profiles or {}
+KeybindManager.CurrentProfile = KeybindManager.CurrentProfile or "default"
 
 if SERVER then
     util.AddNetworkString("KeybindManager_ExecuteCommand")
@@ -61,7 +63,8 @@ if CLIENT then
         if not file.IsDir("keybindmanager", "DATA") then
             file.CreateDir("keybindmanager")
         end
-        local data = util.TableToJSON(self.Keybinds)
+        self.Profiles[self.CurrentProfile] = self.Keybinds
+        local data = util.TableToJSON(self.Profiles)
         file.Write("keybindmanager/keybinds.json", data)
     end
 
@@ -69,8 +72,22 @@ if CLIENT then
     function KeybindManager:LoadKeybinds()
         if file.Exists("keybindmanager/keybinds.json", "DATA") then
             local data = file.Read("keybindmanager/keybinds.json", "DATA")
-            self.Keybinds = util.JSONToTable(data) or {}
+            self.Profiles = util.JSONToTable(data) or {}
+            self.Keybinds = self.Profiles[self.CurrentProfile] or {}
         end
+    end
+
+    -- Save the current profile
+    function KeybindManager:SaveProfile(name)
+        self.Profiles[name] = self.Keybinds
+        self:SaveKeybinds()
+    end
+
+    -- Load a specific profile
+    function KeybindManager:LoadProfile(name)
+        self.Keybinds = self.Profiles[name] or {}
+        self.CurrentProfile = name
+        self:SaveKeybinds()
     end
 
     -- Override default behavior
