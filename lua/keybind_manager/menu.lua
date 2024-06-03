@@ -1,4 +1,4 @@
-local keybindList
+local nameEntry, descriptionEntry, commandEntry, keySelector, isDefaultActionCheckbox
 
 function KeybindManager:OpenMenu()
     if IsValid(KeybindManager.Menu) then
@@ -44,6 +44,14 @@ function KeybindManager:OpenMenu()
         profileComboBox:AddChoice(profileName)
     end
 
+    local function clearKeybindEntries()
+        nameEntry:SetValue("")
+        descriptionEntry:SetValue("")
+        commandEntry:SetValue("")
+        keySelector:SetValue(0)
+        isDefaultActionCheckbox:SetChecked(false)
+    end
+
     local function populateKeybindList()
         keybindList:Clear()
         for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile]) do
@@ -53,11 +61,14 @@ function KeybindManager:OpenMenu()
 
     hook.Add("KeybindManagerProfileChanged", "ReloadKeybindList", function()
         populateKeybindList()
+        clearKeybindEntries()
     end)
 
     profileComboBox.OnSelect = function(panel, index, value)
         KeybindManager:LoadProfile(value)
+        KeybindManager:SaveLastProfile()
         populateKeybindList()
+        clearKeybindEntries()
     end
 
     local newProfileButton = vgui.Create("DButton", profilePanel)
@@ -68,6 +79,7 @@ function KeybindManager:OpenMenu()
         Derma_StringRequest("New Profile", "Enter profile name:", "", function(text)
             if text and text ~= "" then
                 KeybindManager:SaveProfile(text)
+                KeybindManager:SaveLastProfile()
                 profileComboBox:AddChoice(text)
                 profileComboBox:SetValue(text)
                 KeybindManager:LoadProfile(text)
@@ -82,23 +94,22 @@ function KeybindManager:OpenMenu()
     deleteProfileButton:SetWide(100)
     deleteProfileButton.DoClick = function()
         local selectedProfile = profileComboBox:GetValue()
-        if selectedProfile and selectedProfile ~= "" then
+        if selectedProfile and selectedProfile ~= "" and selectedProfile ~= "default" then
             KeybindManager.Profiles[selectedProfile] = nil
             if selectedProfile == KeybindManager.CurrentProfile then
                 KeybindManager.CurrentProfile = "default"
                 KeybindManager.Keybinds = KeybindManager.Profiles["default"] or {}
             end
-            KeybindManager:SaveKeybinds()
+            file.Delete("keybindmanager/" .. selectedProfile .. ".json")
 
             profileComboBox:Clear()
-
             for profileName, _ in pairs(KeybindManager.Profiles) do
                 profileComboBox:AddChoice(profileName)
             end
-
             profileComboBox:SetValue(KeybindManager.CurrentProfile)
 
             populateKeybindList()
+            clearKeybindEntries()
         end
     end
 
@@ -126,30 +137,28 @@ function KeybindManager:OpenMenu()
     keybindList:SetHeaderHeight(30)
     keybindList:SetDataHeight(25)
 
-    populateKeybindList()
-
     createLabel(leftPanel, "Keybind Name:")
-    local nameEntry = vgui.Create("DTextEntry", leftPanel)
+    nameEntry = vgui.Create("DTextEntry", leftPanel)
     nameEntry:Dock(TOP)
     nameEntry:DockMargin(0, 0, 0, 10)
 
     createLabel(leftPanel, "Description:")
-    local descriptionEntry = vgui.Create("DTextEntry", leftPanel)
+    descriptionEntry = vgui.Create("DTextEntry", leftPanel)
     descriptionEntry:Dock(TOP)
     descriptionEntry:DockMargin(0, 0, 0, 10)
 
     createLabel(leftPanel, "Console Command:")
-    local commandEntry = vgui.Create("DTextEntry", leftPanel)
+    commandEntry = vgui.Create("DTextEntry", leftPanel)
     commandEntry:Dock(TOP)
     commandEntry:DockMargin(0, 0, 0, 10)
 
     createLabel(leftPanel, "Key:")
-    local keySelector = vgui.Create("DBinder", leftPanel)
+    keySelector = vgui.Create("DBinder", leftPanel)
     keySelector:Dock(TOP)
     keySelector:SetWide(150)
     keySelector:DockMargin(0, 0, 0, 10)
 
-    local isDefaultActionCheckbox = vgui.Create("DCheckBoxLabel", leftPanel)
+    isDefaultActionCheckbox = vgui.Create("DCheckBoxLabel", leftPanel)
     isDefaultActionCheckbox:SetText("Is Default Action")
     isDefaultActionCheckbox:Dock(TOP)
     isDefaultActionCheckbox:SetTextColor(Color(255, 255, 255))
@@ -206,6 +215,11 @@ function KeybindManager:OpenMenu()
             isDefaultActionCheckbox:SetChecked(bind.isDefaultAction)
         end
     end
+
+    KeybindManager:LoadLastProfile()
+    KeybindManager:LoadKeybinds()
+    populateKeybindList()
+    clearKeybindEntries()
 
     KeybindManager.Menu = menu
 end

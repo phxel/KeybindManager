@@ -61,24 +61,53 @@ if CLIENT then
     end
 
     function KeybindManager:LoadKeybinds()
-        local fileName = self.CurrentProfile .. ".json"
-        if file.Exists("keybindmanager/" .. fileName, "DATA") then
-            local data = file.Read("keybindmanager/" .. fileName, "DATA")
-            self.Profiles[self.CurrentProfile] = util.JSONToTable(data) or {}
-        else
-            self.Profiles[self.CurrentProfile] = {}
+        local files = file.Find("keybindmanager/*.json", "DATA")
+        for _, fileName in ipairs(files) do
+            if fileName ~= "lastprofile.json" then
+                local profileName = fileName:sub(1, -6) -- Remove the .json extension
+                local data = file.Read("keybindmanager/" .. fileName, "DATA")
+                self.Profiles[profileName] = util.JSONToTable(data) or {}
+            end
         end
     end
 
     function KeybindManager:SaveProfile(name)
         self.CurrentProfile = name
+        if not self.Profiles[self.CurrentProfile] then
+            self.Profiles[self.CurrentProfile] = {}
+        end
         self:SaveKeybinds()
     end
 
     function KeybindManager:LoadProfile(name)
         self.CurrentProfile = name
+        if not self.Profiles[self.CurrentProfile] then
+            self.Profiles[self.CurrentProfile] = {}
+        end
         self:LoadKeybinds()
         hook.Run("KeybindManagerProfileChanged")
+    end
+
+    function KeybindManager:SaveLastProfile()
+        if not file.IsDir("keybindmanager", "DATA") then
+            file.CreateDir("keybindmanager")
+        end
+        local data = util.TableToJSON({lastProfile = self.CurrentProfile})
+        file.Write("keybindmanager/lastprofile.json", data)
+    end
+
+    function KeybindManager:LoadLastProfile()
+        if file.Exists("keybindmanager/lastprofile.json", "DATA") then
+            local data = file.Read("keybindmanager/lastprofile.json", "DATA")
+            local decoded = util.JSONToTable(data)
+            if decoded and decoded.lastProfile then
+                self.CurrentProfile = decoded.lastProfile
+            else
+                self.CurrentProfile = "default"
+            end
+        else
+            self.CurrentProfile = "default"
+        end
     end
 
     hook.Add("PlayerBindPress", "KeybindManager_PlayerBindPress", function(ply, bind, pressed)
