@@ -43,6 +43,12 @@ if CLIENT then
                         net.SendToServer()
                     end
                 end
+            elseif not isPressed and KeybindManager.KeyStates[key] then
+                -- Key was just released
+                if bind.isDefaultAction then
+                    -- Stop the default action
+                    RunConsoleCommand("-" .. bind.command:sub(2))
+                end
             end
 
             -- Update the key state
@@ -71,8 +77,14 @@ if CLIENT then
     hook.Add("PlayerBindPress", "KeybindManager_PlayerBindPress", function(ply, bind, pressed)
         for name, keybind in pairs(KeybindManager.Keybinds) do
             if keybind.isDefaultAction and bind:lower():find(keybind.command) then
-                return true  -- Block the default action
+                return true -- Block the default action
             end
         end
+
+        -- If the bind is not found in the keybinds, allow the default action
+        return nil
     end)
+    
+    -- This should be at the bottom
+    include("keybind_manager/spawnmenu.lua")
 end

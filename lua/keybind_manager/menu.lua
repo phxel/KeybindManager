@@ -1,4 +1,3 @@
--- keybind_manager/menu.lua
 function KeybindManager:OpenMenu()
     local frame = vgui.Create("DFrame")
     frame:SetTitle("Keybind Manager")
@@ -12,7 +11,7 @@ function KeybindManager:OpenMenu()
     -- Create the form for adding new keybinds
     local addPanel = vgui.Create("DPanel", scrollPanel)
     addPanel:Dock(TOP)
-    addPanel:SetTall(250) -- Increased height to ensure all elements fit
+    addPanel:SetTall(300) -- Increased height to ensure all elements fit
     addPanel:DockMargin(0, 0, 0, 10)
 
     local nameLabel = vgui.Create("DLabel", addPanel)
@@ -56,6 +55,12 @@ function KeybindManager:OpenMenu()
     keySelector:SetWide(150)
     keySelector:DockMargin(0, 0, 0, 10)
 
+    local isDefaultActionCheckbox = vgui.Create("DCheckBoxLabel", addPanel)
+    isDefaultActionCheckbox:SetText("Is Default Action")
+    isDefaultActionCheckbox:Dock(TOP)
+    isDefaultActionCheckbox:SetTextColor(Color(0, 0, 0))
+    isDefaultActionCheckbox:DockMargin(0, 0, 0, 10)
+
     local addButton = vgui.Create("DButton", addPanel)
     addButton:SetText("Add Keybind")
     addButton:Dock(TOP)
@@ -65,13 +70,15 @@ function KeybindManager:OpenMenu()
         local description = descriptionEntry:GetValue()
         local key = keySelector:GetValue()
         local command = commandEntry:GetValue()
-    
+        local isDefaultAction = isDefaultActionCheckbox:GetChecked()
+
         if name and key and description and command then
-            KeybindManager:RegisterKeybind(name, key, description, command)
+            KeybindManager:RegisterKeybind(name, key, description, command, isDefaultAction)
             nameEntry:SetValue("")
             descriptionEntry:SetValue("")
             keySelector:SetValue(0)
             commandEntry:SetValue("")
+            isDefaultActionCheckbox:SetValue(false)
             frame:Close()
             KeybindManager:OpenMenu()
         end
@@ -106,6 +113,7 @@ function KeybindManager:OpenMenu()
         deleteButton:SetWide(50)
         deleteButton:DockMargin(5, 0, 0, 0)
         deleteButton.DoClick = function()
+            local defaultBind = input.LookupBinding(bind.command) or ""
             KeybindManager.Keybinds[name] = nil
             KeybindManager:SaveKeybinds()
             frame:Close()
