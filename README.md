@@ -2,10 +2,7 @@
 
 Keybind Manager is a Garry's Mod addon that provides a convenient way to manage and customize keybinds. It allows players to create, edit, and delete keybinds, as well as organize them into different profiles.
 
-
-https://github.com/thatrtxdude/KeybindManager/assets/88516241/674d84ba-49e0-450e-bd8c-3d4c550bb111
-
-
+https://github.com/thatrtxdude/KeybindManager/assets/88516241/5e9cceb1-a97b-4025-9a5a-548ff5ba76ed
 
 ## Features
 
