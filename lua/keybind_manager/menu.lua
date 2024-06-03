@@ -194,6 +194,11 @@ function KeybindManager:OpenMenu()
                 local defaultBind = input.LookupBinding(bind.command) or ""
                 KeybindManager.Profiles[KeybindManager.CurrentProfile][name] = nil
                 KeybindManager:SaveKeybinds()
+
+                if bind.isDefaultAction then
+                    RunConsoleCommand("bind", defaultBind, bind.command)
+                end
+
                 populateKeybindList()
             end
         end
