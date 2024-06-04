@@ -1,4 +1,4 @@
-local nameEntry, descriptionEntry, commandEntry, keySelector, isDefaultActionCheckbox
+local nameEntry, descriptionEntry, commandEntry, keySelector, isDefaultActionCheckbox, releaseCommandEntry
 
 function KeybindManager:OpenMenu()
     if IsValid(KeybindManager.Menu) then
@@ -19,7 +19,7 @@ function KeybindManager:OpenMenu()
 
     local menu = vgui.Create("DFrame")
     menu:SetTitle("Keybind Manager")
-    menu:SetSize(600, 500)
+    menu:SetSize(600, 550)
     menu:Center()
     menu:MakePopup()
     menu:SetDraggable(true)
@@ -50,6 +50,7 @@ function KeybindManager:OpenMenu()
         commandEntry:SetValue("")
         keySelector:SetValue(0)
         isDefaultActionCheckbox:SetChecked(false)
+        releaseCommandEntry:SetValue("")
     end
 
     local function populateKeybindList()
@@ -158,6 +159,11 @@ function KeybindManager:OpenMenu()
     keySelector:SetWide(150)
     keySelector:DockMargin(0, 0, 0, 10)
 
+    createLabel(leftPanel, "Release Command (optional):")
+    releaseCommandEntry = vgui.Create("DTextEntry", leftPanel)
+    releaseCommandEntry:Dock(TOP)
+    releaseCommandEntry:DockMargin(0, 0, 0, 10)
+
     isDefaultActionCheckbox = vgui.Create("DCheckBoxLabel", leftPanel)
     isDefaultActionCheckbox:SetText("Is Default Action")
     isDefaultActionCheckbox:Dock(TOP)
@@ -174,9 +180,10 @@ function KeybindManager:OpenMenu()
         local key = keySelector:GetValue()
         local command = commandEntry:GetValue()
         local isDefaultAction = isDefaultActionCheckbox:GetChecked()
+        local releaseCommand = releaseCommandEntry:GetValue()
 
         if name and key and description and command then
-            KeybindManager:RegisterKeybind(name, key, description, command, isDefaultAction)
+            KeybindManager:RegisterKeybind(name, key, description, command, isDefaultAction, releaseCommand)
             populateKeybindList()
         end
     end
@@ -208,6 +215,7 @@ function KeybindManager:OpenMenu()
             commandEntry:SetValue(bind.command)
             keySelector:SetValue(bind.key)
             isDefaultActionCheckbox:SetChecked(bind.isDefaultAction)
+            releaseCommandEntry:SetValue(bind.releaseCommand or "")
         end
     end
 

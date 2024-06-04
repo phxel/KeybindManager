@@ -15,13 +15,14 @@ if SERVER then
 end
 
 if CLIENT then
-    function KeybindManager:RegisterKeybind(name, defaultKey, description, command, isDefaultAction)
+    function KeybindManager:RegisterKeybind(name, defaultKey, description, command, isDefaultAction, releaseCommand)
         self.Profiles[self.CurrentProfile] = self.Profiles[self.CurrentProfile] or {}
         self.Profiles[self.CurrentProfile][name] = {
             key = defaultKey,
             description = description,
             command = command,
-            isDefaultAction = isDefaultAction or false
+            isDefaultAction = isDefaultAction or false,
+            releaseCommand = releaseCommand or nil
         }
         self:SaveKeybinds()
     end
@@ -32,6 +33,7 @@ if CLIENT then
             local isPressed = input.IsKeyDown(key)
 
             if isPressed and not KeybindManager.KeyStates[key] then
+                -- Key pressed
                 if bind.command then
                     if bind.isDefaultAction then
                         RunConsoleCommand(bind.command)
@@ -42,8 +44,15 @@ if CLIENT then
                     end
                 end
             elseif not isPressed and KeybindManager.KeyStates[key] then
-                if bind.isDefaultAction then
-                    RunConsoleCommand("-" .. bind.command:sub(2))
+                -- Key released
+                if bind.releaseCommand then
+                    if bind.isDefaultAction then
+                        RunConsoleCommand(bind.releaseCommand)
+                    else
+                        net.Start("KeybindManager_ExecuteCommand")
+                        net.WriteString(bind.releaseCommand)
+                        net.SendToServer()
+                    end
                 end
             end
 
@@ -109,13 +118,4 @@ if CLIENT then
             self.CurrentProfile = "default"
         end
     end
-
-    hook.Add("PlayerBindPress", "KeybindManager_PlayerBindPress", function(ply, bind, pressed)
-        for name, keybind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile]) do
-            if keybind.isDefaultAction and bind:lower():find(keybind.command) then
-                return true
-            end
-        end
-        return nil
-    end)
 end
