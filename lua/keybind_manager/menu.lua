@@ -10,7 +10,7 @@ function KeybindManager:OpenMenu()
     local function createLabel(parent, text)
         local label = vgui.Create("DLabel", parent)
         label:SetText(text)
-        label:SetFont("DermaDefaultBold")
+        label:SetFont("DermaDefault")
         label:SetTextColor(Color(255, 255, 255))
         label:Dock(TOP)
         label:DockMargin(0, 0, 0, 5)
@@ -36,7 +36,7 @@ function KeybindManager:OpenMenu()
         draw.RoundedBox(0, 0, 0, w, h, Color(60, 60, 60, 230))
     end
 
-    createLabel(profilePanel, "Profile:")
+    createLabel(profilePanel, " Profile:")
     local profileComboBox = vgui.Create("DComboBox", profilePanel)
     profileComboBox:Dock(FILL)
     profileComboBox:SetValue(KeybindManager.CurrentProfile)
@@ -55,7 +55,7 @@ function KeybindManager:OpenMenu()
 
     local function populateKeybindList()
         keybindList:Clear()
-        for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile]) do
+        for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile] or {}) do
             keybindList:AddLine(name)
         end
     end
@@ -111,6 +111,8 @@ function KeybindManager:OpenMenu()
 
             populateKeybindList()
             clearKeybindEntries()
+        else
+            print("[KeybindManager] Cannot delete default or invalid profile.")
         end
     end
 
@@ -185,6 +187,8 @@ function KeybindManager:OpenMenu()
         if name and key and description and command then
             KeybindManager:RegisterKeybind(name, key, description, command, isDefaultAction, releaseCommand)
             populateKeybindList()
+        else
+            print("[KeybindManager] Invalid keybind details.")
         end
     end
 
@@ -202,7 +206,11 @@ function KeybindManager:OpenMenu()
                 KeybindManager.Profiles[KeybindManager.CurrentProfile][name] = nil
                 KeybindManager:SaveKeybinds()
                 populateKeybindList()
+            else
+                print("[KeybindManager] Keybind not found.")
             end
+        else
+            print("[KeybindManager] No keybind selected for deletion.")
         end
     end
 
@@ -216,6 +224,8 @@ function KeybindManager:OpenMenu()
             keySelector:SetValue(bind.key)
             isDefaultActionCheckbox:SetChecked(bind.isDefaultAction)
             releaseCommandEntry:SetValue(bind.releaseCommand or "")
+        else
+            print("[KeybindManager] Keybind not found in the profile.")
         end
     end
 

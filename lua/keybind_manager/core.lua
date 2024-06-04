@@ -10,12 +10,23 @@ if SERVER then
         local command = net.ReadString()
         if IsValid(ply) and ply:IsPlayer() then
             ply:ConCommand(command)
+        else
+            print("[KeybindManager] Invalid player or command received.")
         end
     end)
 end
 
 if CLIENT then
+    local function isValidKeybind(name, defaultKey, description, command)
+        return name and defaultKey and description and command
+    end
+
     function KeybindManager:RegisterKeybind(name, defaultKey, description, command, isDefaultAction, releaseCommand)
+        if not isValidKeybind(name, defaultKey, description, command) then
+            error("[KeybindManager] Invalid arguments passed to KeybindManager:RegisterKeybind")
+            return
+        end
+
         self.Profiles[self.CurrentProfile] = self.Profiles[self.CurrentProfile] or {}
         self.Profiles[self.CurrentProfile][name] = {
             key = defaultKey,
@@ -28,7 +39,7 @@ if CLIENT then
     end
 
     hook.Add("Think", "KeybindManager_Think", function()
-        for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile]) do
+        for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile] or {}) do
             local key = bind.key
             local isPressed = input.IsKeyDown(key)
 
@@ -61,23 +72,51 @@ if CLIENT then
     end)
 
     function KeybindManager:SaveKeybinds()
-        if not file.IsDir("keybindmanager", "DATA") then
+        -- Create the directory if it doesn't exist
+        if not file.Exists("keybindmanager", "DATA") then
             file.CreateDir("keybindmanager")
         end
+
         local fileName = self.CurrentProfile .. ".json"
         local data = util.TableToJSON(self.Profiles[self.CurrentProfile] or {})
-        file.Write("keybindmanager/" .. fileName, data)
+        
+        -- Perform the file write operation
+        local success, err = pcall(function()
+            file.Write("keybindmanager/" .. fileName, data)
+        end)
+        if not success then
+            error("[KeybindManager] Failed to save keybinds: " .. err)
+        end
+    end
+
+    local function loadKeybindFile(fileName)
+        local data = file.Read("keybindmanager/" .. fileName, "DATA")
+        if not data then
+            error("[KeybindManager] Failed to read keybind file: " .. fileName)
+        end
+        return util.JSONToTable(data) or {}
     end
 
     function KeybindManager:LoadKeybinds()
         local files = file.Find("keybindmanager/*.json", "DATA")
+        
+        -- Cache the loaded profiles
+        local loadedProfiles = {}
+        
         for _, fileName in ipairs(files) do
             if fileName ~= "lastprofile.json" then
                 local profileName = fileName:sub(1, -6) -- Remove the .json extension
-                local data = file.Read("keybindmanager/" .. fileName, "DATA")
-                self.Profiles[profileName] = util.JSONToTable(data) or {}
+                local success, profile = pcall(loadKeybindFile, fileName)
+                if success then
+                    loadedProfiles[profileName] = profile
+                else
+                    print("[KeybindManager] Error loading profile " .. profileName .. ": " .. profile)
+                end
             end
         end
+        
+        -- Assign the loaded profiles to the Profiles table
+        self.Profiles = loadedProfiles
     end
 
     function KeybindManager:SaveProfile(name)
@@ -98,22 +137,31 @@ if CLIENT then
     end
 
     function KeybindManager:SaveLastProfile()
-        if not file.IsDir("keybindmanager", "DATA") then
+        -- Create the directory if it doesn't exist
+        if not file.Exists("keybindmanager", "DATA") then
             file.CreateDir("keybindmanager")
         end
+
         local data = util.TableToJSON({lastProfile = self.CurrentProfile})
-        file.Write("keybindmanager/lastprofile.json", data)
+        
+        -- Perform the file write operation
+        local success, err = pcall(function()
+            file.Write("keybindmanager/lastprofile.json", data)
+        end)
+        if not success then
+            error("[KeybindManager] Failed to save last profile: " .. err)
+        end
     end
 
     function KeybindManager:LoadLastProfile()
         if file.Exists("keybindmanager/lastprofile.json", "DATA") then
             local data = file.Read("keybindmanager/lastprofile.json", "DATA")
-            local decoded = util.JSONToTable(data)
-            if decoded and decoded.lastProfile then
-                self.CurrentProfile = decoded.lastProfile
-            else
-                self.CurrentProfile = "default"
+            if not data then
+                error("[KeybindManager] Failed to read last profile file")
             end
+
+            local decoded = util.JSONToTable(data)
+            self.CurrentProfile = decoded and decoded.lastProfile or "default"
         else
             self.CurrentProfile = "default"
         end
