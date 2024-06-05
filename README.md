@@ -4,6 +4,10 @@ Keybind Manager is a Garry's Mod addon that provides a convenient way to manage 
 
 https://github.com/thatrtxdude/KeybindManager/assets/88516241/5e9cceb1-a97b-4025-9a5a-548ff5ba76ed
 
+> [!NOTE]  
+> This video is outdated and doesn't reflect current features.
+> It only demonstrates basic functionality.
+
 ## Features
 
 - Create and manage multiple keybind profiles
@@ -28,9 +32,8 @@ https://github.com/thatrtxdude/KeybindManager/assets/88516241/5e9cceb1-a97b-4025
    - Open the console and type in `open_keybind_manager`
    - Access the Keybind Manager through the spawnmenu under "Utilities" > "Keybind Manager".
 3. Create a new profile or select an existing profile from the dropdown menu.
-4. Add, edit, or delete keybinds using the provided options in the menu.
 5. Customize the keybind name, description, command, and key for each keybind.
-6. Save your changes and close the menu.
+6. Add the keybind using the dedicated Add Keybind button.
 7. The keybinds will now be active and can be used in-game.
 
 ## Configuration
@@ -52,7 +55,7 @@ Keybind Manager consists of the following files:
 
 ## Contributing
 
-Contributions to Keybind Manager are welcome! If you encounter any issues, have suggestions for improvements, or would like to contribute new features, please feel free to submit a pull request.
+Contributions are welcome! If you encounter any issues, have suggestions for improvements, or would like to contribute new features, please feel free to submit a pull request.
 
 ## License
 
