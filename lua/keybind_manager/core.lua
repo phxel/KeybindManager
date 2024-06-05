@@ -41,10 +41,16 @@ if CLIENT then
     hook.Add("Think", "KeybindManager_Think", function()
         for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile] or {}) do
             local key = bind.key
-            local isPressed = input.IsKeyDown(key)
+            local isPressed
+
+            if type(key) == "number" and key >= MOUSE_FIRST and key <= MOUSE_LAST then
+                isPressed = input.IsMouseDown(key)
+            else
+                isPressed = input.IsKeyDown(key)
+            end
 
             if isPressed and not KeybindManager.KeyStates[key] then
-                -- Key pressed
+                -- Key or mouse button pressed
                 if bind.command then
                     if bind.isDefaultAction then
                         RunConsoleCommand(bind.command)
@@ -55,7 +61,7 @@ if CLIENT then
                     end
                 end
             elseif not isPressed and KeybindManager.KeyStates[key] then
-                -- Key released
+                -- Key or mouse button released
                 if bind.releaseCommand then
                     if bind.isDefaultAction then
                         RunConsoleCommand(bind.releaseCommand)
