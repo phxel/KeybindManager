@@ -8,6 +8,9 @@ https://github.com/thatrtxdude/KeybindManager/assets/88516241/5e9cceb1-a97b-4025
 > This video is outdated and doesn't reflect current features.
 > It only demonstrates basic functionality.
 
+> [!WARNING]  
+> This addon is not finished yet! Things can break over versions, and bugs are (hopefully not) present!
+
 ## Features
 
 - Create and manage multiple keybind profiles
