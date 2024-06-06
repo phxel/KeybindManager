@@ -140,6 +140,7 @@ function KeybindManager:OpenMenu()
     keybindList:SetHeaderHeight(30)
     keybindList:SetDataHeight(25)
 
+    -- create necessary labels
     createLabel(leftPanel, "Keybind Name:")
     nameEntry = vgui.Create("DTextEntry", leftPanel)
     nameEntry:Dock(TOP)
@@ -236,3 +237,5 @@ function KeybindManager:OpenMenu()
 
     KeybindManager.Menu = menu
 end
+
+-- I have concluded that derma is like css, but horrible
