@@ -25,7 +25,7 @@ function KeybindManager:OpenMenu()
     menu:SetDraggable(true)
     menu:ShowCloseButton(true)
     menu.Paint = function(self, w, h)
-        draw.RoundedBox(0, 0, 0, w, h, Color(50, 50, 50, 230))
+        draw.RoundedBox(0, 0, 0, w, h, Color(75, 75, 75, 200))
     end
 
     local profilePanel = vgui.Create("DPanel", menu)
@@ -161,6 +161,7 @@ function KeybindManager:OpenMenu()
     keySelector:Dock(TOP)
     keySelector:SetWide(150)
     keySelector:DockMargin(0, 0, 0, 10)
+    keySelector:SetTextColor(Color(0,0,0))
 
     createLabel(leftPanel, "Release Command (optional):")
     releaseCommandEntry = vgui.Create("DTextEntry", leftPanel)
