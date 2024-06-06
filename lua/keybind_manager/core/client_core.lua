@@ -70,7 +70,7 @@ function KeybindManager:SaveKeybinds()
     end
 
     local fileName = self.CurrentProfile .. ".json"
-    local data = util.TableToJSON(self.Profiles[self.CurrentProfile] or {})
+    local data = util.TableToJSON(self.Profiles[self.CurrentProfile] or {}, true)
     
     -- Perform the file write operation
     local success, err = pcall(function()
@@ -134,7 +134,7 @@ function KeybindManager:SaveLastProfile()
         file.CreateDir("keybindmanager")
     end
 
-    local data = util.TableToJSON({lastProfile = self.CurrentProfile})
+    local data = util.TableToJSON({lastProfile = self.CurrentProfile}, true)
     
     -- Perform the file write operation
     local success, err = pcall(function()
