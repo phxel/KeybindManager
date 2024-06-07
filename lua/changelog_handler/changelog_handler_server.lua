@@ -1,6 +1,7 @@
 ChangelogHandler = {}
 ChangelogHandler.Changelogs = {
     {version = "1.0.0-Stable", log = "Version 1.0.0 Stable - Initial release"},
+    {version = "1.0.1-Stable", log = "Version 1.0.1 Stable - Version Bump, nothing has changed"},
 }
 ChangelogHandler.CurrentVersion = "1.0.0-Stable"
 
