@@ -1,3 +1,8 @@
+ChangelogHandler = {}
+ChangelogHandler.Changelogs = {
+    {version = "1.0.0-Stable", log = "Version 1.0.0 Stable - Initial release"},
+}
+ChangelogHandler.CurrentVersion = "1.0.0-Stable"
 
 util.AddNetworkString("SendChangelog")
 
