@@ -29,6 +29,7 @@ def update_lua_file(lua_file_path, changelog_table, current_version):
     with open(lua_file_path, 'w') as file:
         found_changelog_table = False
         found_current_version = False
+        file.write("ChangelogHandler = {}\n")  # Add this line
         for line in content:
             if line.strip().startswith("ChangelogHandler.Changelogs = {"):
                 found_changelog_table = True
