@@ -4,7 +4,7 @@ def parse_changelog(file_path):
     with open(file_path, 'r') as file:
         content = file.read()
 
-    pattern = re.compile(r'## \[(\d+\.\d+)\] - \d{4}-\d{2}-\d{2}\n((?:### .*\n(?:- .*\n)*)*)', re.DOTALL)
+    pattern = re.compile(r'## \[(\d+\.\d+(?:\.\d+)?(?:-\w+)?)\] - \d{4}-\d{2}-\d{2}\n((?:### .*\n(?:- .*\n)*)*)', re.DOTALL)
     entries = pattern.findall(content)
 
     changelog_entries = []
