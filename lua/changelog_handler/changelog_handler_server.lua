@@ -1,7 +1,8 @@
 ChangelogHandler = {}
 ChangelogHandler.Changelogs = {
+    {version = "1.0", log = "Test Test 2 Bug 1 test"},
 }
-ChangelogHandler.CurrentVersion = "1.3"  -- This will be updated by the Python script
+ChangelogHandler.CurrentVersion = "1.0"
 
 util.AddNetworkString("SendChangelog")
 
