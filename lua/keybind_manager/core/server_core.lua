@@ -5,6 +5,7 @@ KeybindManager.KeyStates = KeybindManager.KeyStates or {}
 
 util.AddNetworkString("KeybindManager_ExecuteCommand")
 
+-- listen for KeybindManager_ExecuteCommand message, and execute received command
 net.Receive("KeybindManager_ExecuteCommand", function(len, ply)
     local command = net.ReadString()
     if IsValid(ply) and ply:IsPlayer() then

@@ -3,6 +3,7 @@ KeybindManager.Profiles = KeybindManager.Profiles or {}
 KeybindManager.CurrentProfile = KeybindManager.CurrentProfile or "default"
 KeybindManager.KeyStates = KeybindManager.KeyStates or {}
 
+-- function to check if keybind is valid or not
 local function isValidKeybind(name, defaultKey, description, command)
     return name and defaultKey and description and command
 end
@@ -21,7 +22,7 @@ function KeybindManager:RegisterKeybind(name, defaultKey, description, command, 
         isDefaultAction = isDefaultAction or false,
         releaseCommand = releaseCommand or nil
     }
-    self:SaveKeybinds()
+    self:SaveKeybinds() -- call safekeybinds
 end
 
 hook.Add("Think", "KeybindManager_Think", function()
@@ -86,7 +87,7 @@ local function loadKeybindFile(fileName)
     if not data then
         error("[KeybindManager] Failed to read keybind file: " .. fileName)
     end
-    return util.JSONToTable(data) or {}
+    return util.JSONToTable(data) or {} -- returns json table back to lua table (wow really?)
 end
 
 function KeybindManager:LoadKeybinds()
@@ -113,19 +114,19 @@ end
 
 function KeybindManager:SaveProfile(name)
     self.CurrentProfile = name
-    if not self.Profiles[self.CurrentProfile] then
-        self.Profiles[self.CurrentProfile] = {}
+    if not self.Profiles[self.CurrentProfile] then -- check if current profile exists or not
+        self.Profiles[self.CurrentProfile] = {} -- if not, create new empty table
     end
-    self:SaveKeybinds()
+    self:SaveKeybinds() -- .. and save the keybinds into new table
 end
 
 function KeybindManager:LoadProfile(name)
     self.CurrentProfile = name
-    if not self.Profiles[self.CurrentProfile] then
+    if not self.Profiles[self.CurrentProfile] then -- same thing as above
         self.Profiles[self.CurrentProfile] = {}
     end
-    self:LoadKeybinds()
-    hook.Run("KeybindManagerProfileChanged")
+    self:LoadKeybinds() -- load keybinds..
+    hook.Run("KeybindManagerProfileChanged") -- .. and run the hook to signal the menu to reload the list
 end
 
 function KeybindManager:SaveLastProfile()
@@ -134,7 +135,7 @@ function KeybindManager:SaveLastProfile()
         file.CreateDir("keybindmanager")
     end
 
-    local data = util.TableToJSON({lastProfile = self.CurrentProfile}, true)
+    local data = util.TableToJSON({lastProfile = self.CurrentProfile}, true) -- store the current profile into lastProfile so the profile that has been selected gets loaded over different sessions
     
     -- Perform the file write operation
     local success, err = pcall(function()
@@ -147,13 +148,13 @@ end
 
 function KeybindManager:LoadLastProfile()
     if file.Exists("keybindmanager/lastprofile.json", "DATA") then
-        local data = file.Read("keybindmanager/lastprofile.json", "DATA")
+        local data = file.Read("keybindmanager/lastprofile.json", "DATA") -- this should be self explanatory
         if not data then
             error("[KeybindManager] Failed to read last profile file")
         end
 
-        local decoded = util.JSONToTable(data)
-        self.CurrentProfile = decoded and decoded.lastProfile or "default"
+        local decoded = util.JSONToTable(data) -- decode json back into lua table
+        self.CurrentProfile = decoded and decoded.lastProfile or "default" -- load the last profile into currentProfile
     else
         self.CurrentProfile = "default"
     end

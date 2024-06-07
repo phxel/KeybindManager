@@ -1,10 +1,12 @@
 if SERVER then
     include("keybind_manager/core/server_core.lua") -- include server functionality
+    include("changelog_handler/changelog_handler_server.lua")
 else
     KeybindManager = KeybindManager or {}
     include("keybind_manager/core/client_core.lua") -- include client functionality
     include("keybind_manager/menu.lua") -- derma menu for easier registering of keybinds
     include("keybind_manager/spawnmenu.lua") -- spawnmenu integration
+    include("changelog_handler/changelog_handler_client.lua")
     KeybindManager:LoadKeybinds() -- load saved profiles & keybinds
     concommand.Add("open_keybind_manager", function() 
         KeybindManager:OpenMenu()

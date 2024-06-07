@@ -24,7 +24,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add keybind_manager/core/server_core.lua
+        git add changelog_handler/changelog_handler_server.lua
         git commit -m 'Update changelog entries in Lua file'
         git push
       env:

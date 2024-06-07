@@ -7,6 +7,7 @@ function KeybindManager:OpenMenu()
         return
     end
 
+    -- function to create labels so i don't have to repeat myself a gazillion times
     local function createLabel(parent, text)
         local label = vgui.Create("DLabel", parent)
         label:SetText(text)
@@ -44,6 +45,7 @@ function KeybindManager:OpenMenu()
         profileComboBox:AddChoice(profileName)
     end
 
+    -- clear keybind list, used to reload the keybind table
     local function clearKeybindEntries()
         nameEntry:SetValue("")
         descriptionEntry:SetValue("")
@@ -53,6 +55,7 @@ function KeybindManager:OpenMenu()
         releaseCommandEntry:SetValue("")
     end
 
+    -- read keybinds from profile and populate the table again
     local function populateKeybindList()
         keybindList:Clear()
         for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile] or {}) do
@@ -60,6 +63,7 @@ function KeybindManager:OpenMenu()
         end
     end
 
+    -- on profile change, clear keybind list and repopulate
     hook.Add("KeybindManagerProfileChanged", "ReloadKeybindList", function()
         populateKeybindList()
         clearKeybindEntries()
