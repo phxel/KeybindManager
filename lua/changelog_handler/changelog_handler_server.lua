@@ -1,7 +1,14 @@
+ChangelogHandler = {}
 ChangelogHandler.Changelogs = {
-    {version = "1.0.1-Test-2", log = "Version Bump. Testing GitHub Action ## [1.0.1] - 2023-06-07 Version Bump. Testing GitHub Action ## [1.0] - 2023-06-07 Test Test 2 Bug 1 test"},
+    {version = "1.0.0-Stable", log = "Version 1.0.0 Stable - Initial release"},
 }
+ChangelogHandler.CurrentVersion = "1.0.0-Stable"
 
+util.AddNetworkString("SendChangelog")
+
+-- Function to send recent changelogs to the client
+function ChangelogHandler:SendRecentChangelogs(ply, lastSeenVersion)
+    local recentChangelogs = {}
     for _, entry in ipairs(self.Changelogs) do
         if entry.version > lastSeenVersion then
             table.insert(recentChangelogs, entry.log)
@@ -18,17 +25,16 @@ function ChangelogHandler:GetLastSeenVersion(ply)
     return ply:GetPData("ChangelogVersion", "0.0")
 end
 
--- Mark changelog as seen for the player
-function ChangelogHandler:MarkChangelogAsSeen(ply)
-    ply:SetPData("ChangelogVersion", self.CurrentVersion)
-end
-
--- Clear changelog entries for all players
 function ChangelogHandler:ClearChangelogEntries()
     for _, ply in ipairs(player.GetAll()) do
         ply:SetPData("ChangelogVersion", "0.0")
     end
-    print("Changelog entries cleared for all players.")
+end
+
+
+-- Mark changelog as seen for the player
+function ChangelogHandler:MarkChangelogAsSeen(ply)
+    ply:SetPData("ChangelogVersion", self.CurrentVersion)
 end
 
 -- Handle player joining to send the changelog
@@ -48,7 +54,6 @@ hook.Add("PlayerSay", "ShowChangelogCommand", function(ply, text)
     end
 end)
 
--- Command to clear previous changelog entries
 concommand.Add("clear_changelog_entries", function(ply)
     if IsValid(ply) and ply:IsAdmin() then
         ChangelogHandler:ClearChangelogEntries()
