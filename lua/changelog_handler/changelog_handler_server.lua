@@ -1,7 +1,9 @@
 ChangelogHandler = {}
+ChangelogHandler = {}
 ChangelogHandler.Changelogs = {
     {version = "1.0", log = "Test Test 2 Bug 1 test"},
 }
+    {version = "1.0", log = "Test Test 2 Bug 1 test"},
 ChangelogHandler.CurrentVersion = "1.0"
 
 util.AddNetworkString("SendChangelog")
@@ -64,6 +66,10 @@ concommand.Add("clear_changelog_entries", function(ply)
         print("Changelog entries have been cleared for all players.")
     end
 end)
+ChangelogHandler.Changelogs = {
+    {version = "1.0", log = "Test Test 2 Bug 1 test"},
+}
+    {version = "1.0", log = "Test Test 2 Bug 1 test"},
 ChangelogHandler.Changelogs = {
     {version = "1.0", log = "Test Test 2 Bug 1 test"},
 }
