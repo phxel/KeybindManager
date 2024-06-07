@@ -2,7 +2,6 @@ ChangelogHandler = {}
 ChangelogHandler.Changelogs = {
     {version = "1.0", log = "Test Test 2 Bug 1 test"},
 }
-    {version = "1.0", log = "Test Test 2 Bug 1 test"},
 ChangelogHandler.CurrentVersion = "1.0"
 
 util.AddNetworkString("SendChangelog")
