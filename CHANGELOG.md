@@ -1,18 +1,5 @@
-## [1.0.6] - 2023-06-07
+## [1.0.1-Test] - 2023-06-07
 - Version Bump. Testing GitHub Action
-## [1.0.5] - 2023-06-07
-- Version Bump. Testing GitHub Action
-## [1.0.4] - 2023-06-07
-- Version Bump. Testing GitHub Action
-### Added
-- Testing Github action as stated before
-
-## [1.0.3] - 2023-06-07
-- Version Bump. Testing GitHub Action
-
-## [1.0.2] - 2023-06-07
-- Version Bump. Testing GitHub Action
-
 ## [1.0.1] - 2023-06-07
 - Version Bump. Testing GitHub Action
 
