@@ -15,7 +15,7 @@ end
 
     TODO Features:
     - Add user-defined customization to the menu (Theming and whatnot) # OPEN
-    - Reformat .json tables (Currently, keybinds and the attributes they possess are saved on a single line) # OPEN
+    - Reformat .json tables (Currently, keybinds and the attributes they possess are saved on a single line) # CLOSED
     - Reformat codebase for easier maintanance # CLOSED
     - Ability to share profiles between clients (Should be feasible) # OPEN
     - Extend API to allow other developers to create their own profiles/integrate functionality from this addon # OPEN
