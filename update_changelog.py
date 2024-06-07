@@ -23,29 +23,16 @@ def generate_lua_table(changelog_entries):
     lua_table += "}\n"
     return lua_table
 
-def update_lua_file(lua_file_path, changelog_table, current_version):
-    with open(lua_file_path, 'r') as file:
-        content = file.readlines()
-    with open(lua_file_path, 'w') as file:
-        found_changelog_table = False
-        found_current_version = False
-        file.write("ChangelogHandler = {}\n")  # Add this line
-        for line in content:
-            if line.strip().startswith("ChangelogHandler.Changelogs = {"):
-                found_changelog_table = True
-                file.write(changelog_table)
-            elif found_changelog_table and line.strip() == "}":
-                found_changelog_table = False
-            elif line.strip().startswith("ChangelogHandler.CurrentVersion ="):
-                found_current_version = True
-                file.write(f'ChangelogHandler.CurrentVersion = "{current_version}"\n')
-            else:
-                file.write(line)
+def update_lua_file(lua_file_path, changelog_entries, current_version):
+    lua_content = "ChangelogHandler = {}\n"
+    lua_content += "ChangelogHandler.Changelogs = {\n"
+    for version, log in changelog_entries:
+        lua_content += f'    {{version = "{version}", log = "{log}"}},\n'
+    lua_content += "}\n"
+    lua_content += f'ChangelogHandler.CurrentVersion = "{current_version}"\n'
 
-        if not found_changelog_table:
-            file.write(changelog_table)
-        if not found_current_version:
-            file.write(f'ChangelogHandler.CurrentVersion = "{current_version}"\n')
+    with open(lua_file_path, 'w') as file:
+        file.write(lua_content)
 
 if __name__ == "__main__":
     changelog_md_path = 'CHANGELOG.md'
