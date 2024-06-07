@@ -26,19 +26,25 @@ def generate_lua_table(changelog_entries):
 def update_lua_file(lua_file_path, changelog_table, current_version):
     with open(lua_file_path, 'r') as file:
         content = file.readlines()
-
     with open(lua_file_path, 'w') as file:
-        inside_changelog_table = False
+        found_changelog_table = False
+        found_current_version = False
         for line in content:
             if line.strip().startswith("ChangelogHandler.Changelogs = {"):
-                inside_changelog_table = True
+                found_changelog_table = True
                 file.write(changelog_table)
-            elif inside_changelog_table and line.strip() == "}":
-                inside_changelog_table = False
+            elif found_changelog_table and line.strip() == "}":
+                found_changelog_table = False
             elif line.strip().startswith("ChangelogHandler.CurrentVersion ="):
+                found_current_version = True
                 file.write(f'ChangelogHandler.CurrentVersion = "{current_version}"\n')
             else:
                 file.write(line)
+
+        if not found_changelog_table:
+            file.write(changelog_table)
+        if not found_current_version:
+            file.write(f'ChangelogHandler.CurrentVersion = "{current_version}"\n')
 
 if __name__ == "__main__":
     changelog_md_path = 'CHANGELOG.md'
