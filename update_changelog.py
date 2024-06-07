@@ -8,11 +8,13 @@ def parse_changelog(file_path):
     entries = pattern.findall(content)
 
     changelog_entries = []
-    for version, log in entries:
-        log_lines = log.strip().split('\n')
-        log_text = " ".join(line.strip('- ').strip() for line in log_lines if line.strip() and line.startswith('-'))
-        if log_text:
-            changelog_entries.append((version, log_text))
+    for entry in entries:
+        if len(entry) == 2:
+            version, log = entry
+            log_lines = log.strip().split('\n')
+            log_text = " ".join(line.strip('- ').strip() for line in log_lines if line.strip() and line.startswith('-'))
+            if log_text:
+                changelog_entries.append((version, log_text))
 
     return changelog_entries
 
