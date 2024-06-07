@@ -1,14 +1,7 @@
-ChangelogHandler = {}
 ChangelogHandler.Changelogs = {
-    {version = "1.0.0-Stable", log = "Version 1.0.0 Stable - Initial release"},
+    {version = "1.0.1-Test-2", log = "Version Bump. Testing GitHub Action ## [1.0.1] - 2023-06-07 Version Bump. Testing GitHub Action ## [1.0] - 2023-06-07 Test Test 2 Bug 1 test"},
 }
-ChangelogHandler.CurrentVersion = "1.0.0-Stable"
 
-util.AddNetworkString("SendChangelog")
-
--- Function to send recent changelogs to the client
-function ChangelogHandler:SendRecentChangelogs(ply, lastSeenVersion)
-    local recentChangelogs = {}
     for _, entry in ipairs(self.Changelogs) do
         if entry.version > lastSeenVersion then
             table.insert(recentChangelogs, entry.log)
