@@ -1,6 +1,5 @@
 ChangelogHandler = {}
 ChangelogHandler.Changelogs = {
-    -- The Python script will insert changelog entries here
 }
 ChangelogHandler.CurrentVersion = "1.3"  -- This will be updated by the Python script
 
