@@ -4,15 +4,15 @@ def parse_changelog(file_path):
     with open(file_path, 'r') as file:
         content = file.read()
 
-    # Pattern to match changelog entries
     pattern = re.compile(r'## \[(\d+\.\d+)\] - \d{4}-\d{2}-\d{2}\n((?:### .*\n(?:- .*\n)*)*)', re.DOTALL)
     entries = pattern.findall(content)
 
     changelog_entries = []
     for version, log in entries:
         log_lines = log.strip().split('\n')
-        log_text = " ".join(line.strip('- ').strip() for line in log_lines if line.startswith('-'))
-        changelog_entries.append((version, log_text))
+        log_text = " ".join(line.strip('- ').strip() for line in log_lines if line.strip() and line.startswith('-'))
+        if log_text:
+            changelog_entries.append((version, log_text))
 
     return changelog_entries
 
