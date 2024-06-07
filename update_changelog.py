@@ -5,7 +5,7 @@ def parse_changelog(file_path):
         content = file.read()
 
     # Pattern to match changelog entries
-    pattern = re.compile(r'## \[(\d+\.\d+)\] - \d{4}-\d{2}-\d{2}\n(### .*\n(?:- .*\n)*)', re.DOTALL)
+    pattern = re.compile(r'## \[(\d+\.\d+)\] - \d{4}-\d{2}-\d{2}\n((?:### .*\n(?:- .*\n)*)*)', re.DOTALL)
     entries = pattern.findall(content)
 
     changelog_entries = []
@@ -23,7 +23,7 @@ def generate_lua_table(changelog_entries):
     lua_table += "}\n"
     return lua_table
 
-def update_lua_file(lua_file_path, changelog_table):
+def update_lua_file(lua_file_path, changelog_table, current_version):
     with open(lua_file_path, 'r') as file:
         content = file.readlines()
 
@@ -35,13 +35,19 @@ def update_lua_file(lua_file_path, changelog_table):
                 file.write(changelog_table)
             elif inside_changelog_table and line.strip() == "}":
                 inside_changelog_table = False
-            elif not inside_changelog_table:
+            elif line.strip().startswith("ChangelogHandler.CurrentVersion ="):
+                file.write(f'ChangelogHandler.CurrentVersion = "{current_version}"\n')
+            else:
                 file.write(line)
 
 if __name__ == "__main__":
     changelog_md_path = 'CHANGELOG.md'
-    lua_file_path = 'lua/changelog_handler/changelog_handler_server.lua'
+    lua_file_path = 'lua/changelog_handler/changelog_handler_server.lua'  # Adjusted file path
 
     changelog_entries = parse_changelog(changelog_md_path)
-    changelog_table = generate_lua_table(changelog_entries)
-    update_lua_file(lua_file_path, changelog_table)
+    if changelog_entries:
+        current_version = changelog_entries[0][0]  # Get the latest version from the changelog entries
+        changelog_table = generate_lua_table(changelog_entries)
+        update_lua_file(lua_file_path, changelog_table, current_version)
+    else:
+        print("No changelog entries found.")

@@ -1,11 +1,8 @@
-# Changelog
+## [1.0] - 2023-06-07
+### Added
+- Test
+- Test 2
 
-All notable changes to this project will be documented in this file.
-
-## [1.0.1 Stable] - 07-06-2024
-### Version Bump
-- Version Bump, that's all.
-
-## [1.0.0 Stable] - 07-06-2024
-### Initial release
-- Initial release.
+### Fixed
+- Bug 1 test
+- Bug 2 test
