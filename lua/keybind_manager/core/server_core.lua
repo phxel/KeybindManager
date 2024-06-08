@@ -9,8 +9,24 @@ util.AddNetworkString("KeybindManager_ExecuteCommand")
 net.Receive("KeybindManager_ExecuteCommand", function(len, ply)
     local command = net.ReadString()
     if IsValid(ply) and ply:IsPlayer() then
-        ply:ConCommand(command)
+        if ply:IsAdmin() then
+            -- Extract command and arguments
+            local args = {}
+            for arg in command:gmatch("%S+") do
+                table.insert(args, arg)
+            end
+            local cmd = table.remove(args, 1)
+
+            -- Run the command with arguments
+            if cmd then
+                RunConsoleCommand(cmd, unpack(args))
+            end
+        else
+            ply:ConCommand(command)
+        end
     else
         print("[KeybindManager] Invalid player or command received.")
     end
 end)
+
+
