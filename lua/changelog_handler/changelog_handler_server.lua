@@ -3,8 +3,9 @@ ChangelogHandler.Changelogs = {
     {version = "1.0.0-Stable", log = "Version 1.0.0 Stable - Initial release"},
     {version = "1.0.1-Stable", log = "Version 1.0.1 Stable - Version Bump, nothing has changed"},
     {version = "1.1.0-Stable", log = "Version 1.1.0 Stable - Remove isDefaultAction, not needed anymore"},
+    {version = "1.1.5-Stable", log = "Version 1.1.5 Stable - Added button to disable showing changelogs"},
 }
-ChangelogHandler.CurrentVersion = "1.1.0-Stable"
+ChangelogHandler.CurrentVersion = "1.1.5-Stable"
 
 util.AddNetworkString("SendChangelog")
 

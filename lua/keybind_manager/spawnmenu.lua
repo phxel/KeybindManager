@@ -21,6 +21,14 @@ hook.Add("PopulateToolMenu", "KeybindManager_PopulateToolMenu", function()
             gui.OpenURL("https://github.com/thatrtxdude/KeybindManager")
         end
 
+        local showChangelogsCheckbox = vgui.Create("DCheckBoxLabel", panel)
+        showChangelogsCheckbox:SetText("Show Changelogs")
+        showChangelogsCheckbox:SetConVar("show_changelogs")
+        showChangelogsCheckbox:SetValue(GetConVar("show_changelogs"):GetBool())
+        showChangelogsCheckbox:Dock(TOP)
+        showChangelogsCheckbox:DockMargin(10, 10, 10, 0)
+        showChangelogsCheckbox:SetTextColor(Color(0,0,0))
+
         local reportIssuesLabel = vgui.Create("DLabel", panel)
         reportIssuesLabel:SetText("Please report any issues on GitHub, not in the Steam Workshop comments. I don't check those on a regular basis.")
         reportIssuesLabel:SetWrap(true)
