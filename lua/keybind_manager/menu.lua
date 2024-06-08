@@ -204,6 +204,7 @@ function KeybindManager:OpenMenu()
                 local defaultBind = input.LookupBinding(bind.command) or ""
                 KeybindManager.Profiles[KeybindManager.CurrentProfile][name] = nil
                 KeybindManager:SaveKeybinds()
+                clearKeybindEntries()
                 populateKeybindList()
             else
                 print("[KeybindManager] Keybind not found.")
