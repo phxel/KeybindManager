@@ -48,7 +48,9 @@ Keybind Manager does not require any additional configuration. However, you can 
 
 ## Limitations
 This addon cannot run blocked console commands, simply due to certain commands being blocked internally.
+
 [List of all blocked console commands](https://wiki.facepunch.com/gmod/Blocked_ConCommands)
+
 Example for a blocked command would be toggle mat_fullbright 0 1, which is very much harmless, however, this wouldn't work as toggle is blocked in the list.
 
 ## Contributing
