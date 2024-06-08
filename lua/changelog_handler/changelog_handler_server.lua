@@ -7,7 +7,7 @@ ChangelogHandler.Changelogs = {
 }
 ChangelogHandler.CurrentVersion = "1.0.0-Stable"
 
--- Function to send the most recent changelog to the client if it's newer than the last seen version
+-- function to send the most recent changelog to the client if it's newer than the last seen version
 function ChangelogHandler:SendRecentChangelog(ply, lastSeenVersion)
     local mostRecentChangelog = self.Changelogs[#self.Changelogs]
 
@@ -18,13 +18,13 @@ function ChangelogHandler:SendRecentChangelog(ply, lastSeenVersion)
     end
 end
 
--- Handle request from client for changelogs
+-- handle request from client for changelogs
 net.Receive("SendChangelogRequest", function(len, ply)
     local lastSeenVersion = net.ReadString()
     ChangelogHandler:SendRecentChangelog(ply, lastSeenVersion)
 end)
 
--- Example command to manually trigger changelog (for testing)
+-- example command to manually trigger changelog (for testing)
 hook.Add("PlayerSay", "ShowChangelogCommand", function(ply, text)
     if text == "!changelog" then
         local lastSeenVersion = "0.0"

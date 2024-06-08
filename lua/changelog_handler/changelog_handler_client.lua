@@ -1,14 +1,13 @@
--- Create a console variable to store the user's preference
 if not ConVarExists("show_changelogs") then
     CreateConVar("show_changelogs", "1", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Toggle the display of changelogs")
 end
 
--- Function to get the last seen version from the client
+-- function to get the last seen version from the client
 local function GetLastSeenVersion()
     return cookie.GetString("KeybindManager_LastSeenVersion", "0.0")
 end
 
--- Function to mark changelogs as seen
+-- function to mark changelogs as seen
 local function MarkChangelogAsSeen(version)
     cookie.Set("KeybindManager_LastSeenVersion", version)
 end
@@ -32,7 +31,7 @@ net.Receive("SendChangelog", function()
     end
 end)
 
--- Request changelogs from the server when the client joins
+-- request changelogs from the server when the client joins
 hook.Add("InitPostEntity", "RequestChangelogOnJoin", function()
     local lastSeenVersion = GetLastSeenVersion()
     net.Start("SendChangelogRequest")
