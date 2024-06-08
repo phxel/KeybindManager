@@ -8,7 +8,7 @@ local function isValidKeybind(name, defaultKey, description, command)
     return name and defaultKey and description and command
 end
 
-function KeybindManager:RegisterKeybind(name, defaultKey, description, command, isDefaultAction, releaseCommand)
+function KeybindManager:RegisterKeybind(name, defaultKey, description, command, releaseCommand)
     if not isValidKeybind(name, defaultKey, description, command) then
         error("[KeybindManager] Invalid arguments passed to KeybindManager:RegisterKeybind")
         return
@@ -19,7 +19,6 @@ function KeybindManager:RegisterKeybind(name, defaultKey, description, command, 
         key = defaultKey,
         description = description,
         command = command,
-        isDefaultAction = isDefaultAction or false,
         releaseCommand = releaseCommand or nil
     }
     self:SaveKeybinds() -- call safekeybinds
@@ -39,24 +38,16 @@ hook.Add("Think", "KeybindManager_Think", function()
         if isPressed and not KeybindManager.KeyStates[key] then
             -- Key or mouse button pressed
             if bind.command then
-                if bind.isDefaultAction then
-                    RunConsoleCommand(bind.command)
-                else
-                    net.Start("KeybindManager_ExecuteCommand")
-                    net.WriteString(bind.command)
-                    net.SendToServer()
-                end
+                net.Start("KeybindManager_ExecuteCommand")
+                net.WriteString(bind.command)
+                net.SendToServer()
             end
         elseif not isPressed and KeybindManager.KeyStates[key] then
             -- Key or mouse button released
             if bind.releaseCommand then
-                if bind.isDefaultAction then
-                    RunConsoleCommand(bind.releaseCommand)
-                else
-                    net.Start("KeybindManager_ExecuteCommand")
-                    net.WriteString(bind.releaseCommand)
-                    net.SendToServer()
-                end
+                net.Start("KeybindManager_ExecuteCommand")
+                net.WriteString(bind.releaseCommand)
+                net.SendToServer()
             end
         end
 

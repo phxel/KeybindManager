@@ -1,4 +1,4 @@
-local nameEntry, descriptionEntry, commandEntry, keySelector, isDefaultActionCheckbox, releaseCommandEntry
+local nameEntry, descriptionEntry, commandEntry, keySelector, releaseCommandEntry
 
 function KeybindManager:OpenMenu()
     if IsValid(KeybindManager.Menu) then
@@ -51,7 +51,6 @@ function KeybindManager:OpenMenu()
         descriptionEntry:SetValue("")
         commandEntry:SetValue("")
         keySelector:SetValue(0)
-        isDefaultActionCheckbox:SetChecked(false)
         releaseCommandEntry:SetValue("")
     end
 
@@ -172,11 +171,6 @@ function KeybindManager:OpenMenu()
     releaseCommandEntry:Dock(TOP)
     releaseCommandEntry:DockMargin(0, 0, 0, 10)
 
-    isDefaultActionCheckbox = vgui.Create("DCheckBoxLabel", leftPanel)
-    isDefaultActionCheckbox:SetText("Is Default Action")
-    isDefaultActionCheckbox:Dock(TOP)
-    isDefaultActionCheckbox:SetTextColor(Color(255, 255, 255))
-    isDefaultActionCheckbox:DockMargin(0, 0, 0, 10)
 
     local addButton = vgui.Create("DButton", leftPanel)
     addButton:SetText("Add/Update Keybind")
@@ -187,11 +181,10 @@ function KeybindManager:OpenMenu()
         local description = descriptionEntry:GetValue()
         local key = keySelector:GetValue()
         local command = commandEntry:GetValue()
-        local isDefaultAction = isDefaultActionCheckbox:GetChecked()
         local releaseCommand = releaseCommandEntry:GetValue()
 
         if name and key and description and command then
-            KeybindManager:RegisterKeybind(name, key, description, command, isDefaultAction, releaseCommand)
+            KeybindManager:RegisterKeybind(name, key, description, command, releaseCommand)
             populateKeybindList()
         else
             print("[KeybindManager] Invalid keybind details.")
@@ -228,7 +221,6 @@ function KeybindManager:OpenMenu()
             descriptionEntry:SetValue(bind.description)
             commandEntry:SetValue(bind.command)
             keySelector:SetValue(bind.key)
-            isDefaultActionCheckbox:SetChecked(bind.isDefaultAction)
             releaseCommandEntry:SetValue(bind.releaseCommand or "")
         else
             print("[KeybindManager] Keybind not found in the profile.")
