@@ -159,18 +159,17 @@ function KeybindManager:OpenMenu()
     commandEntry:Dock(TOP)
     commandEntry:DockMargin(0, 0, 0, 10)
 
+    createLabel(leftPanel, "Release Command (optional):")
+    releaseCommandEntry = vgui.Create("DTextEntry", leftPanel)
+    releaseCommandEntry:Dock(TOP)
+    releaseCommandEntry:DockMargin(0, 0, 0, 10)
+
     createLabel(leftPanel, "Key:")
     keySelector = vgui.Create("DBinder", leftPanel)
     keySelector:Dock(TOP)
     keySelector:SetWide(150)
     keySelector:DockMargin(0, 0, 0, 10)
     keySelector:SetTextColor(Color(0,0,0))
-
-    createLabel(leftPanel, "Release Command (optional):")
-    releaseCommandEntry = vgui.Create("DTextEntry", leftPanel)
-    releaseCommandEntry:Dock(TOP)
-    releaseCommandEntry:DockMargin(0, 0, 0, 10)
-
 
     local addButton = vgui.Create("DButton", leftPanel)
     addButton:SetText("Add/Update Keybind")
