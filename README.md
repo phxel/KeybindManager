@@ -51,7 +51,7 @@ This addon cannot run blocked console commands, simply due to certain commands b
 
 [List of all blocked console commands](https://wiki.facepunch.com/gmod/Blocked_ConCommands)
 
-Example for a blocked command would be toggle mat_fullbright 0 1, which is very much harmless, however, this wouldn't work as toggle is blocked in the list.
+However, I have added a bypass for the `toggle` command by utilizing GetConVar. Every other command in the list will still be blocked.
 
 ## Contributing
 
