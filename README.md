@@ -46,6 +46,11 @@ Keybind Manager does not require any additional configuration. However, you can 
 - `lua/keybind_manager/menu.lua`: Defines the user interface and menu functionality for managing keybinds.
 - `lua/keybind_manager/spawnmenu.lua`: Integrates the Keybind Manager with the spawnmenu for easy access.
 
+## Limitations
+This addon cannot run blocked console commands, simply due to certain commands being blocked internally.
+[List of all blocked console commands](https://wiki.facepunch.com/gmod/Blocked_ConCommands)
+Example for a blocked command would be toggle mat_fullbright 0 1, which is very much harmless, however, this wouldn't work as toggle is blocked in the list.
+
 ## Contributing
 
 Contributions are welcome! If you encounter any issues, have suggestions for improvements, or would like to contribute new features, please feel free to submit a pull request.
