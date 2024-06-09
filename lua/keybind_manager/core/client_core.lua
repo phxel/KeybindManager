@@ -24,7 +24,15 @@ function KeybindManager:RegisterKeybind(name, defaultKey, description, command, 
     self:SaveKeybinds() -- call safekeybinds
 end
 
+-- function to check if the player is typing in a chat or text entry
+local function isTyping()
+    local focusedPanel = vgui.GetKeyboardFocus()
+    return focusedPanel and focusedPanel:GetClassName() == "TextEntry"
+end
+
 hook.Add("Think", "KeybindManager_Think", function()
+    if isTyping() then return end -- Skip keybind processing if typing
+
     for name, bind in pairs(KeybindManager.Profiles[KeybindManager.CurrentProfile] or {}) do
         local key = bind.key
         local isPressed
@@ -54,6 +62,7 @@ hook.Add("Think", "KeybindManager_Think", function()
         KeybindManager.KeyStates[key] = isPressed
     end
 end)
+
 
 function KeybindManager:SaveKeybinds()
     -- Create the directory if it doesn't exist
