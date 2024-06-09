@@ -56,7 +56,7 @@ net.Receive("KeybindManager_ExecuteCommand", function(len, ply)
                     end
                 end
             else
-                --error("[KeybindManager] Command is invalid or empty.")
+                --error("[KeybindManager] Command is invalid or empty.") -- dont remove this im too lazy to get rid of it :3
             end
         else
             ply:ConCommand(command)
