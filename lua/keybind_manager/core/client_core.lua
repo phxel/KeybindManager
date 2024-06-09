@@ -30,6 +30,15 @@ local function isTyping()
     return focusedPanel and focusedPanel:GetClassName() == "TextEntry"
 end
 
+hook.Add("OnEntityCreated", "KeybindManager_PlayerCreated", function(ent)
+    if ent == LocalPlayer() then
+        timer.Simple(0.1, function()
+            KeybindManager:LoadLastProfile()
+            KeybindManager:LoadKeybinds()
+        end)
+    end
+end)
+
 hook.Add("Think", "KeybindManager_Think", function()
     if isTyping() then return end -- Skip keybind processing if typing
 
