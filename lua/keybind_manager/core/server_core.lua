@@ -5,52 +5,63 @@ KeybindManager.KeyStates = KeybindManager.KeyStates or {}
 
 util.AddNetworkString("KeybindManager_ExecuteCommand")
 
--- listen for KeybindManager_ExecuteCommand message, and execute received command
+--[[
+    this script listens for the KeybindManager_ExecuteCommand network message and executes the received command
+    
+    - if the player is valid and is an admin:
+        - it parses the command and its arguments, disects those and puts the arguments in a table
+        - if the command is "toggle" and there are exactly three arguments:
+            - the script runs toggle (wow)
+        - otherwise, it tries to run the command using RunConsoleCommand
+        - if RunConsoleCommand fails, it attempts to run the command using ply:ConCommand
+    - if the player is not an admin, it directly runs the command using ply:ConCommand
+    - if the player is invalid or the command is invalid, it prints an error message
+--]]
+
 net.Receive("KeybindManager_ExecuteCommand", function(len, ply)
     local command = net.ReadString()
     if IsValid(ply) and ply:IsPlayer() then
         if ply:IsAdmin() then
-            local args = {} -- new table for arguments
-            for arg in command:gmatch("%S+") do -- remove whitespace from command
-                table.insert(args, arg) -- insert into args table
+            local args = {} 
+            for arg in command:gmatch("%S+") do 
+                table.insert(args, arg) 
             end
-            local cmd = table.remove(args, 1) --extract the first element from the table, which would be the toggle in this case
+            local cmd = table.remove(args, 1) 
 
             if cmd then
-                if cmd == "toggle" and #args == 3 then -- check if cmd is toggle and 3 arguments are present in args
-                    local convar_name = args[1] -- assign the 1st member of table to convar_name, here it would be toggle
-                    local value1 = tonumber(args[2]) -- assign 2nd member of table to value1
-                    local value2 = tonumber(args[3]) -- assign 3rd member of table to value2
-                    if convar_name and value1 and value2 then -- check if all of these have a value
-                        local var = GetConVar(convar_name) -- look for convar, again toggle here
-                        if var then -- check if var exists by checking if a value is assigned
-                            local currentValue = var:GetInt() -- get the assigned value
+                if cmd == "toggle" and #args == 3 then 
+                    local convar_name = args[1] 
+                    local value1 = tonumber(args[2]) 
+                    local value2 = tonumber(args[3]) 
+                    if convar_name and value1 and value2 then 
+                        local var = GetConVar(convar_name)
+                        if var then 
+                            local currentValue = var:GetInt() 
                             local newValue = (currentValue == value1) and value2 or value1
-                            RunConsoleCommand(convar_name, tostring(newValue)) -- ??? ok
+                            RunConsoleCommand(convar_name, tostring(newValue)) 
                         else
                             error("[KeybindManager] Unknown ConVar for toggle: " .. convar_name)
                         end
                     else
                         error("[KeybindManager] Invalid arguments for toggle")
                     end
-                else -- if the command doesn't have toggle as its first member
+                else 
                     local success, err = pcall(function()
-                        RunConsoleCommand(cmd, unpack(args)) -- run command
+                        RunConsoleCommand(cmd, unpack(args)) 
                     end)
 
                     if not success then
                         print("[KeybindManager] Failed to run command with RunConsoleCommand: " .. err) -- print this into console, not an actual "error" per se
-                        ply:ConCommand(command) -- if somehow success is not true, do this instead
+                        ply:ConCommand(command) 
                     end
                 end
             else
                 --error("[KeybindManager] Command is invalid or empty.")
             end
         else
-            ply:ConCommand(command) -- if not admin, run with ConCommand
+            ply:ConCommand(command)
         end
     else
         print("[KeybindManager] Invalid player or command received.")
     end
 end)
-
