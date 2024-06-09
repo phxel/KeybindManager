@@ -14,7 +14,7 @@ https://github.com/thatrtxdude/KeybindManager/assets/88516241/5e9cceb1-a97b-4025
 ## Features
 
 - Create and manage multiple keybind profiles
-- Bind keys to execute console commands or default actions <- (Default actions need some work)
+- Bind keys to execute console commands
 - Intuitive and user-friendly menu interface
 - Customizable keybind names, descriptions, and commands
 - Ability to save and load keybind profiles
@@ -45,6 +45,8 @@ Keybind Manager does not require any additional configuration. However, you can 
 - `lua/keybind_manager/core.lua`: Contains the core functionality of the addon, including keybind registration, saving, and loading.
 - `lua/keybind_manager/menu.lua`: Defines the user interface and menu functionality for managing keybinds.
 - `lua/keybind_manager/spawnmenu.lua`: Integrates the Keybind Manager with the spawnmenu for easy access.
+
+Recently I have integrated a second "module" into this addon, which handles Changelogs and whatnot. You can find the code for it in `lua/changelog_handler/`. In the future this will be released as its own standalone GitHub repository.
 
 ## Limitations
 This addon cannot run blocked console commands, simply due to certain commands being blocked internally.
