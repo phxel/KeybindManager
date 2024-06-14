@@ -18,7 +18,7 @@ hook.Add("PopulateToolMenu", "KeybindManager_PopulateToolMenu", function()
         githubButton:DockMargin(10, 10, 10, 0)
         githubButton:SetTextColor(Color(0,0,0))
         githubButton.DoClick = function()
-            gui.OpenURL("https://github.com/thatrtxdude/KeybindManager")
+            gui.OpenURL("https://github.com/solaceware/KeybindManager")
         end
 
         local showChangelogsCheckbox = vgui.Create("DCheckBoxLabel", panel)
