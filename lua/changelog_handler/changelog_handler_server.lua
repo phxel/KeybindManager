@@ -5,8 +5,9 @@ ChangelogHandler = {}
 ChangelogHandler.Changelogs = {
     {version = "1.0.0-Stable", log = "Version 1.0.0 Stable - Initial release"},
     {version = "1.0.1-Stable", log = "Version 1.0.1 Stable - Minor bugfixes"},
+    {version = "1.0.2-Stable", log = "Version 1.0.1 Stable - New redirect to GitHub page"},
 }
-ChangelogHandler.CurrentVersion = "1.0.1-Stable"
+ChangelogHandler.CurrentVersion = "1.0.2-Stable"
 
 -- function to send the most recent changelog to the client if it's newer than the last seen version
 function ChangelogHandler:SendRecentChangelog(ply, lastSeenVersion)
